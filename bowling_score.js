@@ -5,10 +5,13 @@
 
 //var rawScoreString = '';
 
+// If 10th frame is strike, then 2 extra throws.
 var rawScoreString1 = 'X-X-X-X-X-X-X-X-X-X-XX';
 
+// If 10th frame is not a spare or strike, then no extra throws.
 var rawScoreString2 = '45-54-36-27-09-63-81-18-90-72';
 
+// If 10th frame is spare, then 1 extra throw.
 var rawScoreString3 = '5/-5/-5/-5/-5/-5/-5/-5/-5/-5/-5';
 
 var rawScoreString4 = '45-54-36-27-09-63-81-18-90-7/-5';
@@ -20,17 +23,17 @@ var rawScoreString5 = '9/-54-36-20-09-63-11-18-90-7/-5';
 //
 
 // Convert array of scores to numbers if appropriate
-function convertToNumber(stringArgument)
-{
-  var frameScoresArray = stringArgument.split("-");
-  //
-   // Show it to user.
-    console.log('The frameScoresArray is: '+ frameScoresArray);
-
-  var frameScoresArray = frameScoresArray.map(_=>_|0);
-  console.log ('Convert array of frame scores to numbers if appropriate: ' + frameScoresArray);
-}
-
+// function convertToNumber(stringArgument)
+// {
+//   var frameScoresArray = stringArgument.split("-");
+//   //
+//    // Show it to user.
+//     console.log('The frameScoresArray is: '+ frameScoresArray);
+//
+//   var frameScoresArray = frameScoresArray.map(_=>_|0);
+//   console.log ('Convert array of frame scores to numbers if appropriate: ' + frameScoresArray);
+// }
+//
 // Calculate points from raw score.
 // take text input and convert it to score.
 // Store scores in an array?
@@ -97,6 +100,52 @@ function convertToNumber(stringArgument)
 //      console.log('The calculatedScore = ' + calculatedScore);
 
 
+// pseudocode
+// Frames 1-10 convert to number and add them
+
+// loop inside frames 1-10
+// How long is array?
+//   If 1 - verify X convert to 10 and add.
+//   If 2 - If 2nd position is /, then 10.
+//   Else just add 2 numbers.
+
+// if 10th is strike
+//   Frame 11 - add 2 throws and add them
+// if 10th is spare
+//   Frame 11 - add one throw and add it
+
+function calculateScore(rawScore) {
+  for (var i = 0; i < 9; i++) {
+
+    switch (rawScore)
+    {
+      // If that frame was a strike
+      case rawScore[i] === 'x':
+        totalScoreOfGame = totalScoreOfGame + 10;
+        break;
+
+      // If that frame was a spare
+      case rawScore[i].includes('/'):
+        totalScoreOfGame = totalScoreOfGame + 10;
+        break;
+
+      default:
+        // If frame is an open frame
+        // Add the scores of the two throws of the frame.
+        var openFrameScore = rawScore[i];
+        var throw1 = number(openFrameScore[0]);
+        var throw2 = number(openFrameScore[1]);
+        totalScoreOfGame = totalScoreOfGame + throw1 + throw2;
+    } // end of case / switch statement
+
+  } // end of for loop
+
+    // 11th frame
+    // case rawscore[10] === 'x'
+    //add
+    // break;
+}; // end of function calculateScore()
+
 // The points are broken up by fram.
 // loop through new array of scores from each frame.
 // total points for each frame.
@@ -145,14 +194,14 @@ function convertToNumber(stringArgument)
 // getScore();
 
 
-convertToNumber(rawScoreString2);
+// convertToNumber(rawScoreString2);
 
 
 //
 // // Calculate points from raw score.
 //calculateScore(rawScoreString1);
 
-//calculateScore(rawScoreString2);
+calculateScore(rawScoreString2);
 //
 // calculateScore(rawScoreString3);
 //
