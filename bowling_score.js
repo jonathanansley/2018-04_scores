@@ -22,17 +22,20 @@ var rawScoreString5 = '9/-54-36-20-09-63-11-18-90-7/-5';
 // functions
 //
 
-// Convert array of scores to numbers if appropriate
-// function convertToNumber(stringArgument)
-// {
-//   var frameScoresArray = stringArgument.split("-");
-//   //
-//    // Show it to user.
-//     console.log('The frameScoresArray is: '+ frameScoresArray);
 //
-//   var frameScoresArray = frameScoresArray.map(_=>_|0);
-//   console.log ('Convert array of frame scores to numbers if appropriate: ' + frameScoresArray);
-// }
+function splitArray(stringArgument)
+{
+  // var frameScoresArray = stringArgument.split("-");
+  //
+  // Show it to user.
+  console.log('The split array is: '+ stringArgument.split("-"));
+
+  // var frameScoresArray = frameScoresArray.map(_=>_|0);
+  // console.log ('Convert array of frame scores to numbers if appropriate: ' + frameScoresArray);
+
+  return stringArgument.split("-");
+}
+
 //
 // Calculate points from raw score.
 // take text input and convert it to score.
@@ -52,7 +55,7 @@ var rawScoreString5 = '9/-54-36-20-09-63-11-18-90-7/-5';
 //   // Show it to user.
 //   console.log(stringArgument.split("-"));
 //
-//   var totalScoreOfGame = 0;
+  var totalScoreOfGame = 0;
 //
 //   var frameScore = 0;
 //
@@ -61,7 +64,6 @@ var rawScoreString5 = '9/-54-36-20-09-63-11-18-90-7/-5';
 //     frameScore  = frameScore + frameScoresArray[i];
 //     console.log('The frameScore = ' + frameScore);
 //     console.log('The totalScoreOfGame while in the for loop = ' + totalScoreOfGame);
-//
 //
 //     switch (new Date() {
 //
@@ -99,7 +101,6 @@ var rawScoreString5 = '9/-54-36-20-09-63-11-18-90-7/-5';
 
 //      console.log('The calculatedScore = ' + calculatedScore);
 
-
 // pseudocode
 // Frames 1-10 convert to number and add them
 
@@ -114,29 +115,120 @@ var rawScoreString5 = '9/-54-36-20-09-63-11-18-90-7/-5';
 // if 10th is spare
 //   Frame 11 - add one throw and add it
 
-function calculateScore(rawScore) {
-  for (var i = 0; i < 9; i++) {
+// case statements
+// function calculateScore(array) {
+//   var newArray = splitArray(array);
+//
+//   for (var i = 0; i < 9; i++) {
+//
+//     switch (newArray[i])
+//     {
+//       // If that frame was a strike
+//       case newArray[i] = 'X':
+//       case newArray[i] = 'x':
+//         console.log('This is the strike case.');
+//         totalScoreOfGame = totalScoreOfGame + 10;
+//         break;
+//
+//       // If that frame was a spare
+//       case newArray[i].includes('/'):
+//         console.log('This is the spare case.');
+//         totalScoreOfGame = totalScoreOfGame + 10;
+//         break;
+//
+//       default:
+//         console.log('This is the open frame case.');
+//
+//         // If frame is an open frame
+//         // Add the scores of the two throws of the frame.
+//         var openFrameScore = newArray[i];
+//
+//         var throw1Number = 0;
+//         var throw2Number = 0;
+//
+//         var throw1String = '';
+//         var throw2String = '';
+//
+//         console.log('openFrameScore = ' + openFrameScore);
+//
+//         throw1String = openFrameScore[0];
+//         console.log('throw1String = ' + throw1String);
+//         throw1Number = Number(throw1String);
+//
+//         throw2String = openFrameScore[1];
+//         console.log('throw2String = ' + throw2String);
+//         throw2Number = Number(throw2String);
+//
+//         console.log('totalScoreOfGame = ' + totalScoreOfGame);
+//
+//         totalScoreOfGame = totalScoreOfGame + throw1Number + throw2Number;
+//
+//        console.log('totalScoreOfGame = totalScoreOfGame + throw1Number + throw2Number = ' + totalScoreOfGame);
+//     } // end of case / switch statement
+//
+//   } // end of for loop
+//
+//     // 11th frame
+//     // case rawscore[10] === 'x'
+//     //add
+//     // break;
+// }; // end of function calculateScore()
 
-    switch (rawScore)
+// re-write to use if / else instead of case / switch
+function calculateScore(array) {
+
+  console.log('This is the calculateScore function.');
+
+  var newArray = splitArray(array);
+
+  for (var i = 0; i < 10; i++) {
+    console.log('inside for loop. newArray[i] = ' + newArray[i]);
+
+    // If that frame was a strike
+    // if (newArray[i] === 'X' || 'x')
+    if (newArray[i] === 'X')
     {
-      // If that frame was a strike
-      case rawScore[i] === 'x':
-        totalScoreOfGame = totalScoreOfGame + 10;
-        break;
+      console.log('Frame ' + (Number(i) + 1) + ' was a strike.');
+      totalScoreOfGame = totalScoreOfGame + 10;
+    }
 
-      // If that frame was a spare
-      case rawScore[i].includes('/'):
-        totalScoreOfGame = totalScoreOfGame + 10;
-        break;
+    // If that frame was a spare
+    else if (newArray[i].includes('/'))
+    {
+      console.log('Frame ' + (Number(i) + 1) + ' was a spare.');
+      totalScoreOfGame = totalScoreOfGame + 10;
+    }
 
-      default:
-        // If frame is an open frame
-        // Add the scores of the two throws of the frame.
-        var openFrameScore = rawScore[i];
-        var throw1 = number(openFrameScore[0]);
-        var throw2 = number(openFrameScore[1]);
-        totalScoreOfGame = totalScoreOfGame + throw1 + throw2;
-    } // end of case / switch statement
+    // If frame is an open frame
+    else
+    {
+      console.log('Frame ' + (Number(i) + 1) + ' was an open frame.');
+
+      // Add the scores of the two throws of the frame.
+      var openFrameScore = newArray[i];
+
+      var throw1Number = 0;
+      var throw2Number = 0;
+
+      var throw1String = '';
+      var throw2String = '';
+
+      console.log('openFrameScore = ' + openFrameScore);
+
+      throw1String = openFrameScore[0];
+      console.log('throw1String = ' + throw1String);
+      throw1Number = Number(throw1String);
+
+      throw2String = openFrameScore[1];
+      console.log('throw2String = ' + throw2String);
+      throw2Number = Number(throw2String);
+
+      console.log('totalScoreOfGame = ' + totalScoreOfGame);
+
+      totalScoreOfGame = totalScoreOfGame + throw1Number + throw2Number;
+
+      console.log('totalScoreOfGame = totalScoreOfGame + throw1Number + throw2Number = ' + totalScoreOfGame);
+    }
 
   } // end of for loop
 
@@ -145,6 +237,8 @@ function calculateScore(rawScore) {
     //add
     // break;
 }; // end of function calculateScore()
+
+
 
 // The points are broken up by fram.
 // loop through new array of scores from each frame.
@@ -201,7 +295,7 @@ function calculateScore(rawScore) {
 // // Calculate points from raw score.
 //calculateScore(rawScoreString1);
 
-calculateScore(rawScoreString2);
+calculateScore(rawScoreString5);
 //
 // calculateScore(rawScoreString3);
 //
