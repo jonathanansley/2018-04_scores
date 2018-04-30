@@ -29,44 +29,50 @@ function calculateScore(array)
 
   var totalScoreOfGame = 0;
 
-  function validateLength(array)
-  {
-    // If 11 frames
-    // calculate 11th.
-    // Then calculate starting and 10 and work down to 1.
-    if (array.length === 11)
-    {
-      frameEleven(array);
-    } // end of if
-
-    // if only 10 frames, you do not need to worry about calculating 11th.
-    else if (array.length === 10)
-    {
-      framesOneThroughTen(array);
-    } // end of else if
-
-    else
-    {
-      console.log('There is an error with the score. It needs to be either 10 or 11 frames.');
-      break;
-    } // end of else
-  }
-
   // The scores in a frame are separated by a hyphen a.k.a. dash "-".
   // Use that as a delimiting character.
   // Create a new array with each frame's score
   // broken up into an index of the array.
   function splitArray(stringArgument)
   {
+    function validateLength(array)
+    {
+      console.log('This is the validateLength function.');
+
+      // If 11 frames
+      // calculate 11th.
+      // Then calculate starting and 10 and work down to 1.
+      if (array.length === 11)
+      {
+        console.log('Frame 10 must have been either a strike or a spare.')
+        frameEleven(array[10]);
+        framesOneThroughTen(array)
+      } // end of if
+
+      // if only 10 frames, you do not need to worry about calculating 11th.
+      else if (array.length === 10)
+      {
+        console.log('Frame 10 must have been an open frame.');
+        framesOneThroughTen(array);
+      } // end of else if
+
+      else
+      {
+        console.log('There is an error with the score. It needs to be either 10 or 11 frames.');
+      } // end of else
+    } // end of validateLength function
+
     console.log('This is the splitArray function.');
 
     splitScore = stringArgument.split('-');
 
     // Show it to user.
-    console.log('The split array is: '+ splitScore );
+    console.log('The splitScore array is: '+ splitScore );
+
+    validateLength(splitScore);
 
     return splitScore;
-  }
+  } // end of splitArray function
 
   // pseudocode
   // Frames 1-10 convert to number and add them
@@ -89,7 +95,7 @@ function calculateScore(array)
     {
       console.log('This is the strike function.');
       console.log('Frame ' + (Number(i) + 1) + ' was a strike.');
-      frameScoresArray[i] = 10
+      frameScoresArray[i] = 10 + newArray[i+1] + newArray[i+2];
     } // end of function strike
 
     // Spare (‘/’): the bowler knocks down all 10 pins using two throws.
@@ -99,7 +105,7 @@ function calculateScore(array)
     {
       console.log('This is the spare function.');
       console.log('Frame ' + (Number(i) + 1) + ' was a spare.');
-      totalScoreOfGame = totalScoreOfGame + 10;
+      frameScoresArray[i] = 10 + newArray[i+1];
     } // end of function spare
 
     // Open frame: the bowler knocks down less than 10 pins with his two throws.
@@ -125,15 +131,16 @@ function calculateScore(array)
 
       console.log('totalScoreOfGame = ' + totalScoreOfGame);
 
-      totalScoreOfGame = totalScoreOfGame + throwNumber01 + throwNumber02;
+      frameScoresArray[i] = throwNumber01 + throwNumber02;
 
-      console.log('totalScoreOfGame = totalScoreOfGame + throw1Number + throw2Number = ' + totalScoreOfGame);
+      console.log('frameScoresArray[i] = throwNumber01 + throwNumber02 = ' + frameScoresArray[i]);
+
     } // end of function openFrame
 
       // Start at 10th frame and work toward 1st frame.
       for (var i = 9; i > 0; i--)
       {
-        console.log('inside for loop. newArray[' + i + ']' = + newArray[i]);
+        console.log('inside for loop. newArray[i]' + newArray[i]);
 
         // If frame was a strike
         if (newArray[i] === 'X' || 'x')
@@ -162,11 +169,9 @@ function calculateScore(array)
   // if 10th is spare
   //   Frame 11 - add one throw and add it
   // 11th frame
-  function frameEleven (stringArgument)
+  function frameEleven(stringArgument)
   {
     console.log('This is the frameEleven function.');
-    //
-    // var frame11Score = 0;
     //
     // frame11Score  = 10 + next 2 throws;
     // function strike(indexOfArray)
@@ -217,9 +222,6 @@ function calculateScore(array)
 
   } // end of function frameEleven
 
-  framesOneThroughTen(stringArgument);
-
-  frameEleven(splitStringText[10]);
 }; // end of function calculateScore()
 
 // The points are broken up by frame.
