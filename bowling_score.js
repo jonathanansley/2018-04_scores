@@ -3,8 +3,6 @@
 // Require packages
 // const inquirer = require("inquirer");
 
-//var rawScore = '';
-
 // If 10th frame is strike, then 2 extra throws.
 var rawScore01 = 'X-X-X-X-X-X-X-X-X-X-XX';
 
@@ -18,16 +16,16 @@ var rawScore04 = '45-54-36-27-09-63-81-18-90-7/-5';
 
 var rawScore05 = '9/-54-36-20-09-63-11-18-90-7/-5';
 
+var pointsPass1 = [];
+
+var pointsPass2 = [];
+
 //
 function calculateScore(array)
 {
   console.log('This is the calculateScore function.');
 
-  var splitScore = splitArray(array);
-
-  var pointsPass1 = '';
-
-  var pointsPass2 = '';
+  var splitScore = [];
 
   var totalScoreOfGame = 0;
 
@@ -37,33 +35,6 @@ function calculateScore(array)
   // broken up into an index of the array.
   function splitArray(stringArgument)
   {
-    // function validateLength(array)
-    // {
-    //   console.log('This is the validateLength function.');
-    //
-    //   // If 11 frames
-    //   // calculate 11th.
-    //   // Then calculate starting and 10 and work down to 1.
-    //   if (array.length === 11)
-    //   {
-    //     console.log('Frame 10 must have been either a strike or a spare.')
-    //     frameEleven(array[10]);
-    //     framesOneThroughTen(array)
-    //   } // end of if
-    //
-    //   // if only 10 frames, you do not need to worry about calculating 11th.
-    //   else if (array.length === 10)
-    //   {
-    //     console.log('Frame 10 must have been an open frame.');
-    //     framesOneThroughTen(array);
-    //   } // end of else if
-    //
-    //   else
-    //   {
-    //     console.log('There is an error with the score. It needs to be either 10 or 11 frames.');
-    //   } // end of else
-    // } // end of validateLength function
-
     console.log('This is the splitArray function.');
 
     splitScore = stringArgument.split('-');
@@ -73,33 +44,18 @@ function calculateScore(array)
 
     // validateLength(splitScore);
 
-    return splitScore;
+    // return splitScore;
   } // end of splitArray function
 
-  // pseudocode
-  // Frames 1-10 convert to number and add them
-
-  // loop inside frames 1-10
-  // How long is array?
-  //   If 1 - verify X convert to 10 and add. Also add next 2 throws.
-  //   If 2 - If 2nd position is /, then 10. Add next 1 throw.
-  //   Else just add 2 numbers.
-  function framesOneThroughTen(stringArgument)
+  function pass1(array)
   {
-    console.log('This is the framesOneThroughTen function.');
-
-    // Strike (‘X’): the bowler knocks down all 10 pins on the first throw.
-    // The frame is over early.
-    // The score for the frame is 10 plus the total pins knocked down
-    // on the next 2 throws.
     // frameScore  = 10 + next 2 throws;
     function strike(indexOfArray)
     {
       console.log(' ');
       console.log('This is the strike function.');
       console.log('Frame ' + (Number(i) + 1) + ' was a strike.');
-      pointsPass1 = 10;
-      //pointsPass1[i] = 10 + splitScore[i+1] + splitScore[i+2];
+      pointsPass1[i] = 10;
     } // end of function strike
 
     // Spare (‘/’): the bowler knocks down all 10 pins using two throws.
@@ -109,9 +65,8 @@ function calculateScore(array)
     {
       console.log(' ');
       console.log('This is the spare function.');
-      console.log('Frame ' + (Number(i) + 1) + ' was a spare.');
-      pointsPass1 = 10;
-      // pointsPass1[i] = 10 + splitScore[i+1];
+      // console.log('Frame ' + (i + 1) + ' was a spare.');
+      pointsPass1[i] = 10;
     } // end of function spare
 
     // Open frame: the bowler knocks down less than 10 pins with their two throws.
@@ -144,94 +99,68 @@ function calculateScore(array)
 
     } // end of function openFrame
 
-      // Start at 10th frame and work toward 1st frame.
-      for (var i = 9; i > 0; i--)
+    // Start at 11th or 10th frame and work down toward 1st frame.
+    for (var i = 0; i < splitScore.length; i--)
+    {
+      console.log(' ');
+      console.log( 'inside for loop. splitScore[i] = ' + splitScore[i] );
+
+      // If frame was a strike
+      if (splitScore[i] === 'X')
       {
-        console.log(' ');
-        console.log( 'inside for loop. splitScore[i] = ' + splitScore[i] );
+        strike(i);
+      }
 
-        // If frame was a strike
-        // if (splitScore[i] === 'X' || 'x')
-        if (splitScore[i] === 'X')
-        {
-          strike(i);
-        }
+      // If frame was a spare
+      else if (splitScore[i].includes('/'))
+      {
+        spare(i);
+      }
 
-        // If frame was a spare
-        else if (splitScore[i].includes('/'))
-        {
-          spare(i);
-        }
+      // If frame is an open frame
+      else
+      {
+        openFrame(splitScore[i], i);
+      }
 
-        // If frame is an open frame
-        else
-        {
-          openFrame(splitScore[i], i);
-        }
+    } // end of for loop
+  } // end of pass1 function
 
-      } // end of for loop
+  function pass2(array)
+  {
+    // Start at 11th or 10th frame and work down toward 1st frame.
+    for (var i = 0; i < splitScore.length; i--)
+    {
+      console.log(' ');
+      console.log( 'inside for loop. splitScore[i] = ' + splitScore[i] );
 
-  } // end of function framesOneThroughTen
+      // If frame was a strike
+      if (splitScore[i] === 'X')
+      {
+        pointsPass2[i] = pointsPass1[i] + pointsPass1[i+1] + pointsPass1[i+2];
+      }
 
-  // if 10th is strike
-  //   Frame 11 - add 2 throws and add them
-  // if 10th is spare
-  //   Frame 11 - add one throw and add it
-  // 11th frame
-  // function frameEleven(stringArgument)
-  // {
-  //   console.log('This is the frameEleven function.');
-  //   //
-  //   // frame11Score  = 10 + next 2 throws;
-  //   // function strike(indexOfArray)
-  //   // {
-  //   //   console.log('This is the strike function.');
-  //   //   console.log('Frame ' + (Number(i) + 1) + ' was a strike.');
-  //   //   totalScoreOfGame = totalScoreOfGame + 10;
-  //   // } // end of function strike
-  //   //
-  //   // // Spare (‘/’): the bowler knocks down all 10 pins using two throws.
-  //   // // The score for the frame is 10 plus the number of pins knocked down
-  //   // // on the next throw.
-  //   // function spare(indexOfArray)
-  //   // {
-  //   //   console.log('This is the spare function.');
-  //   //   console.log('Frame ' + (Number(i) + 1) + ' was a spare.');
-  //   //   totalScoreOfGame = totalScoreOfGame + 10;
-  //   // } // end of function spare
-  //   //
-  //   // // Open frame: the bowler knocks down less than 10 pins with his two throws.
-  //   // // The score for the frame is the total number of pins knocked down.
-  //   // function openFrame(arrayIndex, index)
-  //   // {
-  //   //   console.log('This is the openFrame function.');
-  //   //   console.log('Frame ' + (Number(i) + 1) + ' was an open frame.');
-  //   //
-  //   //   // Add the scores of the two throws of the frame.
-  //   //   var openFrameScore = splitScore[i];
-  //   //
-  //   //.......
-  //   //
-  //   //   console.log('openFrameScore = ' + openFrameScore);
-  //   //
-  //   //   throw1String = openFrameScore[0];
-  //   //   console.log('throw1String = ' + throw1String);
-  //   //   throw1Number = Number(throw1String);
-  //   //
-  //   //   throw2String = openFrameScore[1];
-  //   //   console.log('throw2String = ' + throw2String);
-  //   //   throw2Number = Number(throw2String);
-  //   //
-  //   //   console.log('totalScoreOfGame = ' + totalScoreOfGame);
-  //   //
-  //   //   totalScoreOfGame = totalScoreOfGame + throw1Number + throw2Number;
-  //   //
-  //   //   console.log('totalScoreOfGame = totalScoreOfGame + throw1Number + throw2Number = ' + totalScoreOfGame);
-  //   // } // end of function openFrame
-  //
-  // } // end of function frameEleven
+      // If frame was a spare
+      else if (splitScore[i].includes('/'))
+      {
+        pointsPass2[i] = pointsPass1[i] + pointsPass1[i+1];
+      }
 
-  framesOneThroughTen(array);
+      // If frame is an open frame
+      else
+      {
+        pointsPass2[i] = pointsPass1[i];
+      }
+
+    } // end of for loop
+
+  } // end of pass2 function
+
+  splitArray(array);
+
+  pass1(splitScore);
+
+  // pass2(splitScore);
 
 }; // end of function calculateScore()
 
