@@ -1,34 +1,40 @@
-
 // score mgt system
 
-// Require packages
-// const inquirer = require("inquirer");
-
 // If 10th frame is strike, then 2 extra throws.
-var rawScore01 = 'X-X-X-X-X-X-X-X-X-X-XX';
+const rawScore01 = 'X-X-X-X-X-X-X-X-X-X-XX';
 
 // If 10th frame is an open frame (not a spare or strike), then no extra throws.
-var rawScore02 = '45-54-36-27-09-63-81-18-90-72';
+const rawScore02 = '45-54-36-27-09-63-81-18-90-72';
 
 // If 10th frame is spare, then 1 extra throw.
-var rawScore03 = '5/-5/-5/-5/-5/-5/-5/-5/-5/-5/-5';
+const rawScore03 = '5/-5/-5/-5/-5/-5/-5/-5/-5/-5/-5';
 
-var rawScore04 = '45-54-36-27-09-63-81-18-90-7/-5';
+const rawScore04 = '45-54-36-27-09-63-81-18-90-7/-5';
 
-var rawScore05 = '9/-54-36-20-09-63-11-18-90-7/-5';
+const rawScore05 = '9/-54-36-20-09-63-11-18-90-7/-5';
 
 var pointsPass1 = [];
 
 var pointsPass2 = [];
 
+var splitScore = [];
+
+var totalScoreOfGame = 0;
+
 //
 function calculateScore(array)
 {
+  console.log(' ');
   console.log('This is the calculateScore function.');
+  console.log(' ');
 
-  var splitScore = [];
+  splitArray(array);
 
-  var totalScoreOfGame = 0;
+  pass1(splitScore);
+
+  pass2(splitScore);
+
+} // end of function calculateScore()
 
   // The scores in a frame are separated by a hyphen a.k.a. dash "-".
   // Use that as a delimiting character.
@@ -36,17 +42,18 @@ function calculateScore(array)
   // broken up into an index of the array.
   function splitArray(stringArgument)
   {
+    console.log(' ');
     console.log('This is the splitArray function.');
 
     splitScore = stringArgument.split('-');
 
     // Show it to user.
     console.log('The splitScore array is: '+ splitScore );
-
-    // validateLength(splitScore);
+    console.log(' ');
 
     // return splitScore;
   } // end of splitArray function
+
 
   function pass1(array)
   {
@@ -92,124 +99,102 @@ function calculateScore(array)
       throwNumber02 = Number(openFrameScore[1]);
       console.log('throwNumber02 = ' + throwNumber02);
 
-      console.log('totalScoreOfGame = ' + totalScoreOfGame);
-
       pointsPass1[i] = throwNumber01 + throwNumber02;
 
       console.log('pointsPass1[i] = throwNumber01 + throwNumber02 = ' + pointsPass1[i]);
 
     } // end of function openFrame
+    
+    console.log('The splitScore array is: '+ splitScore );
+    console.log('The pointsPass1 array is: '+ pointsPass1 );
+    console.log(' ');
 
     // Start at 11th or 10th frame and work down toward 1st frame.
-    for (var i = 0; i < splitScore.length; i--)
+    for (var i = 0; i < array.length; i++)
     {
       console.log(' ');
-      console.log( 'inside for loop. splitScore[i] = ' + splitScore[i] );
+      console.log( 'i = ' + i );
+      console.log( 'inside for loop. array[i] = ' + array[i] );
 
       // If frame was a strike
-      if (splitScore[i] === 'X')
+      if (array[i] === 'X')
       {
+        console.log('');
+        console.log( 'i = ' + i );
+        console.log('if - array[i] === x, call strike function');
         strike(i);
       }
 
       // If frame was a spare
-      else if (splitScore[i].includes('/'))
+      else if (array[i].includes('/'))
       {
+        console.log('');
+        console.log( 'i = ' + i );
+        console.log('else if - array[i].includes /, call spare function');
         spare(i);
       }
 
       // If frame is an open frame
       else
       {
-        openFrame(splitScore[i], i);
+        console.log('');
+        console.log('else - call openFrame function');
+        openFrame(array[i], i);
       }
 
     } // end of for loop
+    
+    console.log('The pointsPass1 array is: '+ pointsPass1 );
+    console.log(' ');
+    
   } // end of pass1 function
+
 
   function pass2(array)
   {
-    // Start at 11th or 10th frame and work down toward 1st frame.
-    for (var i = 0; i < splitScore.length; i--)
+    // 
+    for (var i = 0; i < array.length; i--)
     {
       console.log(' ');
-      console.log( 'inside for loop. splitScore[i] = ' + splitScore[i] );
+      console.log( 'inside for loop. array[i] = ' + array[i] );
 
       // If frame was a strike
-      if (splitScore[i] === 'X')
+      if (array[i] === 'X')
       {
+        console.log('');
+        console.log( 'i = ' + i );
+        console.log('if - array[i] === X');
         pointsPass2[i] = pointsPass1[i] + pointsPass1[i+1] + pointsPass1[i+2];
+        console.log(' ');    
+        console.log('The pointsPass2 array is: '+ pointsPass2);
       }
 
       // If frame was a spare
-      else if (splitScore[i].includes('/'))
+      else if (array[i].includes('/'))
       {
+        console.log('');
+        console.log( 'i = ' + i );
+        console.log('else if - array[i].includes /');
         pointsPass2[i] = pointsPass1[i] + pointsPass1[i+1];
+        console.log(' ');   
+        console.log('The pointsPass2 array is: '+ pointsPass2);
       }
 
       // If frame is an open frame
       else
       {
+        console.log('');
+        console.log( 'i = ' + i );
+        console.log('else open frame');
         pointsPass2[i] = pointsPass1[i];
+        console.log(' ');    
+        console.log('The pointsPass2 array is: '+ pointsPass2);
       }
 
     } // end of for loop
 
   } // end of pass2 function
 
-  splitArray(array);
-
-  pass1(splitScore);
-
-  // pass2(splitScore);
-
-}; // end of function calculateScore()
-
-// The points are broken up by frame.
-// loop through new array of scores from each frame.
-// total points for each frame.
-
-// Get score of bowling game.
-// Ask user for score.
-// User types in text string.
-// function getScore()
-//   {
-//     console.log('This is the beginning of getScore() function.');
-//     inquirer.prompt([
-//       {
-//         type: "input",
-//         name: "rawScore",
-//         message: "Enter score of bowling game: ",
-//         //message: "Please enter the score of the bowling game. e.g. X-X-X-X-X-X-X-X-X-X-XX would be a perfect game.",
-//       }
-//
-//     ]).then(function(user) {
-//         console.log("The rawScore is: " + user.rawScore);
-// //        console.log('This is the end of getScore() function.');
-//       rawScoreString = user.rawScore;
-//       console.log("The rawScoreString is: " + rawScoreString);
-//     })
-//
-//
-//    console.log('This is the end of getScore() function.');
-//   }; // end of function getScore()
-
 // Call functions
-//
-// Ask user for score.
-// getScore();
-
-//
 // Calculate points from raw score.
-//calculateScore(rawScore01);
-
-calculateScore(rawScore05);
-//
-// calculateScore(rawScore03);
-//
-// calculateScore(rawScore04);
-//
-// calculateScore(rawScore05);
-//
-//displayScore();
-//
+calculateScore(rawScore02);
